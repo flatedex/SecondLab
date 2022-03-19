@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace SecondLab
+﻿namespace SecondLab
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            Console.WriteLine("Hello World!");
+
         }
     }
 }
