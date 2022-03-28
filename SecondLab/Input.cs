@@ -45,37 +45,47 @@ namespace SecondLab
             }
             return numbers;
         }
-        public static void KeyboardInput(Tree tree, List<int> temp) // Create list before random for saving inputs
+        public static String KeyboardInput(String toEncode) // Create list before random for saving inputs
         {
-            Console.WriteLine("How many nodes do you want to add?");
-            int counter = GetNumber();
-            int node = 0;
-            for (int i = 0; i <= counter - 1; i++)
-            {
-                Console.WriteLine($"Enter node {i + 1} key");
-                node = GetNumber();
-                tree.InsertNode(node);
-            }
-            Console.WriteLine("Tree is filled");
+            Console.WriteLine("Enter a string you want to encode:");
+            toEncode = Console.ReadLine().ToString();
+            Console.WriteLine("Done successfully!");
+            return toEncode;
         }
-        public static void RandomInput(Tree tree, List<int> temp) // Create list before random for saving inputs
+        public static void KeyboardCoefficients(ref int a, ref int b)
         {
+            Console.WriteLine("Enter coefficient a:");
+            a = GetNumber();
+            Console.WriteLine("Enter coefficient b:");
+            b = GetNumber();
+            Console.WriteLine("Done successfully!");
+        }
 
-            const int RIGHT = 99;
-            const int LEFT = 0;
+        public static string RandomInput(String toEncode) // Create list before random for saving inputs
+        {
+            
+            const int leftLower = 97;
+            const int rightLower = 122;
 
-            Console.WriteLine("How many nodes do you want to add?");
+            Console.WriteLine("How many letters in lower case do you want to add?");
             int counter = GetNumber();
             Random random = new Random();
-            int node = 0;
             for (int i = 0; i <= counter - 1; i++)
             {
-                node = random.Next(LEFT, RIGHT);
-                temp.Add(node);
-                tree.InsertNode(node);
-                Console.WriteLine($"Value {node} was inserted");
+                Char letter = (Char)random.Next(leftLower, rightLower);
+                toEncode += letter;
             }
-            Console.WriteLine("Tree is filled");
+            Console.WriteLine(toEncode);
+            Console.WriteLine("Done successfully!");
+            return toEncode;
+        }
+        public static void RandomCoefficients(int a, int b)
+        {
+            const int integersLower = 0;
+            const int integersUpper = 25; 
+            Random random = new Random();
+            a = random.Next(integersLower, integersUpper);
+            b = random.Next(integersLower, integersUpper);
         }
     }
 }

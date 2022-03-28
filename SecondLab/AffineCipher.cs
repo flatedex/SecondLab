@@ -6,7 +6,11 @@ namespace SecondLab
 {
     public class Affine : ICipher
     {
-        public int lengthOfAlphabet = 26;
+        public const int lengthOfAlphabet = 26;
+        public const int firstUppercase = 65;
+        public const int lastUppercase = 90;
+        public const int firstLowercase = 97;
+        public const int lastLowercase = 122;
 
         public String Encode(String plainText, int a, int b)
         {
@@ -23,16 +27,16 @@ namespace SecondLab
             for (int i = 0; i < codes.Count; i++)
             {
                 //changes if uppercase
-                if (codes[i] >= 65 & codes[i] <= 90)
+                if (codes[i] >= firstUppercase & codes[i] <= lastUppercase)
                 {
-                    int x = Convert.ToInt32(codes[i] - 65);
-                    coded += (char)(((a * x + b) % 26) + 65);
+                    int x = Convert.ToInt32(codes[i] - firstUppercase);
+                    coded += (char)(((a * x + b) % lengthOfAlphabet) + firstUppercase);
                 }
                 //changes if lowercase
-                else if (codes[i] >= 97 & codes[i] <= 122)
+                else if (codes[i] >= firstLowercase & codes[i] <= lastLowercase)
                 {
-                    int x = Convert.ToInt32(codes[i] - 97);
-                    coded += (char)(((a * x + b) % 26) + 97);
+                    int x = Convert.ToInt32(codes[i] - firstLowercase);
+                    coded += (char)(((a * x + b) % lengthOfAlphabet) + firstLowercase);
                 }
                 else
                 {
@@ -45,7 +49,7 @@ namespace SecondLab
         {
             if (!IsCoprime(a, lengthOfAlphabet)) throw new ArgumentException();
 
-            int aInvers = MultiplicativeInverse(a);
+            int aInverse = MultiplicativeInverse(a);
 
             List<int> codes = new List<int>();
             String decoded = "";
@@ -58,25 +62,25 @@ namespace SecondLab
             for (int i = 0; i < codes.Count; i++)
             {
                 //changes if uppercase
-                if (codes[i] >= 65 & codes[i] <= 90)
+                if (codes[i] >= firstUppercase & codes[i] <= lastUppercase)
                 {
-                    int x = Convert.ToInt32(codes[i] - 65);
+                    int x = Convert.ToInt32(codes[i] - firstUppercase);
                     if (x - b < 0)
                     {
-                        x += Convert.ToInt32(x) + 26;
+                        x += Convert.ToInt32(x) + lengthOfAlphabet;
                     }
-                    decoded += (char)((aInvers * (x-b) % 26) + 65);
+                    decoded += (char)((aInverse * (x-b) % lengthOfAlphabet) + firstUppercase);
                 }
                 //changes if lowercase
-                else if (codes[i] >= 97 & codes[i] <= 122)
+                else if (codes[i] >= firstLowercase & codes[i] <= lastLowercase)
                 {
-                    int x = Convert.ToInt32(codes[i] - 97);
+                    int x = Convert.ToInt32(codes[i] - firstLowercase);
                     if (x - b < 0)
                     {
-                        x += Convert.ToInt32(x) + 26;
+                        x += Convert.ToInt32(x) + lengthOfAlphabet;
                     }
-                    if (((char)(aInvers * (x - b) % 26) + 97) == 'f') { decoded += 'k'; }
-                    else decoded += (char)((aInvers * (x - b) % 26) + 97);
+                    if (((char)(aInverse * (x - b) % lengthOfAlphabet) + firstLowercase) == 'f') decoded += 'k';
+                    else decoded += (char)((aInverse * (x - b) % lengthOfAlphabet) + firstLowercase);
                 }
                 else
                 {
