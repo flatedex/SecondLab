@@ -49,16 +49,28 @@ namespace SecondLab
         {
             Console.WriteLine("Enter a string you want to encode:");
             toEncode = Console.ReadLine().ToString();
-            Console.WriteLine("Done successfully!");
+            Console.WriteLine("\nDone successfully!\n");
             return toEncode;
         }
         public static void KeyboardCoefficients(ref int a, ref int b)
         {
-            Console.WriteLine("Enter coefficient a:");
-            a = GetNumber();
-            Console.WriteLine("Enter coefficient b:");
-            b = GetNumber();
-            Console.WriteLine("Done successfully!");
+            Boolean isOk = false;
+            const int lengthOfAlphabet = 26;
+            do
+            {
+                Console.WriteLine("Enter coefficient a:");
+                a = GetNumber();
+                while (!Affine.IsCoprime(a, lengthOfAlphabet))
+                {
+                    Console.WriteLine("Coefficient a must be coprime with length of alphabet");
+                    Console.WriteLine("Enter coefficient a:");
+                    a = GetNumber();
+                }
+                Console.WriteLine("Enter coefficient b:");
+                b = GetNumber();
+                Console.WriteLine("\nDone successfully!\n");
+                isOk = true;
+            } while (!isOk);
         }
 
         public static string RandomInput(String toEncode) // Create list before random for saving inputs
@@ -76,16 +88,8 @@ namespace SecondLab
                 toEncode += letter;
             }
             Console.WriteLine(toEncode);
-            Console.WriteLine("Done successfully!");
+            Console.WriteLine("\nDone successfully!\n");
             return toEncode;
-        }
-        public static void RandomCoefficients(int a, int b)
-        {
-            const int integersLower = 0;
-            const int integersUpper = 25; 
-            Random random = new Random();
-            a = random.Next(integersLower, integersUpper);
-            b = random.Next(integersLower, integersUpper);
         }
     }
 }

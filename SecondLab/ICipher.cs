@@ -2,7 +2,7 @@
 
 namespace SecondLab
 {
-    internal interface ICipher
+    public interface ICipher
     {
         public String Encode(String toEncode)
         {

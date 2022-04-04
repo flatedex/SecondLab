@@ -12,9 +12,11 @@ namespace SecondLab
         public const int firstLowercase = 97;
         public const int lastLowercase = 122;
 
-        public String Encode(String plainText, int a, int b)
+        public String Encode(String plainText)
         {
-            if (!IsCoprime(a, lengthOfAlphabet)) throw new ArgumentException();
+            int a = 0, b = 0;
+
+            Input.KeyboardCoefficients(ref a, ref b);
 
             List<int> codes = new List<int>();
             String coded = "";
@@ -45,50 +47,98 @@ namespace SecondLab
             }
             return coded;
         }
-        public String Decode(String cipheredText, int a, int b)
+        /*       public String Decode(String cipheredText)
+               {
+                   int a = 0, b = 0;
+
+                   Input.KeyboardCoefficients(ref a, ref b);
+
+                   int aInverse = MultiplicativeInverse(a);
+
+                   List<int> codes = new List<int>();
+                   String decoded = "";
+
+                   foreach (char letter in cipheredText)
+                   {
+                       codes.Add((int)letter);
+                   }
+
+                   for (int i = 0; i < codes.Count; i++)
+                   {
+                       //changes if uppercase
+                       if (codes[i] >= firstUppercase & codes[i] <= lastUppercase)
+                       {
+                           int x = Convert.ToInt32(codes[i] - firstUppercase);
+                           if (x - b < 0)
+                           {
+                               x += Convert.ToInt32(x) + lengthOfAlphabet;
+                           }
+                           decoded += (char)((aInverse * (x-b) % lengthOfAlphabet) + firstUppercase);
+                       }
+                       //changes if lowercase
+                       else if (codes[i] >= firstLowercase & codes[i] <= lastLowercase)
+                       {
+                           int x = Convert.ToInt32(codes[i] - firstLowercase);
+                           if (x - b < 0)
+                           {
+                               x += Convert.ToInt32(x) + lengthOfAlphabet;
+                           }
+                           decoded += (char)((aInverse * (x - b) % lengthOfAlphabet) + firstLowercase);
+                       }
+                       else
+                       {
+                           decoded += (char)codes[i];
+                       }
+                   }
+
+                   return new String(decoded);
+               }*/
+        public string Decode(string cipheredText)
         {
-            if (!IsCoprime(a, lengthOfAlphabet)) throw new ArgumentException();
+            int a = 0, b = 0;
 
-            int aInverse = MultiplicativeInverse(a);
+            Input.KeyboardCoefficients(ref a, ref b);
 
-            List<int> codes = new List<int>();
-            String decoded = "";
+            int mmi = MultiplicativeInverse(a);
 
-            foreach (char letter in cipheredText)
+            String text = "";
+
+            foreach (Char letter in cipheredText.ToCharArray())
             {
-                codes.Add((int)letter);
-            }
+                Char? en = Decode(letter, mmi, b);
 
-            for (int i = 0; i < codes.Count; i++)
-            {
-                //changes if uppercase
-                if (codes[i] >= firstUppercase & codes[i] <= lastUppercase)
+                if (en != null)
                 {
-                    int x = Convert.ToInt32(codes[i] - firstUppercase);
-                    if (x - b < 0)
-                    {
-                        x += Convert.ToInt32(x) + lengthOfAlphabet;
-                    }
-                    decoded += (char)((aInverse * (x-b) % lengthOfAlphabet) + firstUppercase);
-                }
-                //changes if lowercase
-                else if (codes[i] >= firstLowercase & codes[i] <= lastLowercase)
-                {
-                    int x = Convert.ToInt32(codes[i] - firstLowercase);
-                    if (x - b < 0)
-                    {
-                        x += Convert.ToInt32(x) + lengthOfAlphabet;
-                    }
-                    if (((char)(aInverse * (x - b) % lengthOfAlphabet) + firstLowercase) == 'f') decoded += 'k';
-                    else decoded += (char)((aInverse * (x - b) % lengthOfAlphabet) + firstLowercase);
-                }
-                else
-                {
-                    decoded += (char)codes[i];
+                    text += en;
                 }
             }
 
-            return new String(decoded);
+            return text;
+        }
+        private static Char? Decode(Char letter, int mmi, int b)
+        {
+            int x = (Int32)letter;
+            if (letter >= firstUppercase & letter <= lastUppercase)
+            {
+                x = (mmi * ((letter - 'A') - b)) % lengthOfAlphabet;
+
+                if (x < 0)
+                {
+                    x += lengthOfAlphabet;
+                }
+                return (Char)('A' + x);
+            }
+            else if (letter >= firstLowercase & letter <= lastLowercase)
+            {
+                x = (mmi * ((letter - 'a') - b)) % lengthOfAlphabet;
+
+                if (x < 0)
+                {
+                    x += lengthOfAlphabet;
+                }
+                return (Char)('a' + x);
+            }
+            else return (Char)(x);
         }
         public int MultiplicativeInverse(int a)
         {
